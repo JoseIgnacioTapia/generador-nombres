@@ -29,57 +29,23 @@ function cargarNombres(e) {
         url += `results=${cantidad}`;
     }
 
-    // Conectar con ajax
-    // Iniciar XMLHTTPRequest
-    const xhr = new XMLHttpRequest();
-    // Abrimos la conexion
-    xhr.open('GET', url, true);
-    // Datos e impresión del template
-    xhr.onload = function() {
-        if(this.status === 200) {
-            const resultado = JSON.parse(this.responseText);
-            const nombres = resultado.results;
-            
-            // Generar el HTML
-            let htmlNombres = '<h2>Nombres Generados</h2>';
-
-            htmlNombres += '<ul class="lista">';
-
-            // Imprimir cada nombre
-            nombres.forEach(function(nombre) {
-                htmlNombres += `
-                    <li>${nombre.name.first}
+    // Crear fetch
+    fetch(url)
+        .then(function(res) {
+            return res.json();
+        })
+        .then(function(data) {
+            let html = `<h2>Nombres Generados</h2>`;
+            html += `<ul class="lista">`;
+            data.results.forEach(function(nombre) {
+                html += `
+                    <li>${nombre.name.first}</li>
                 `;
             });
-
-            htmlNombres += '</ul>';
-
-            document.getElementById('resultado').innerHTML = htmlNombres;
-            
-        }
-    }
-    // Enviar el Request
-    xhr.send();
+            html += `</ul>`;
+            document.querySelector('#resultado').innerHTML = html;
+        })
+        .catch(function(error) {
+            console.log(error);
+        })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
